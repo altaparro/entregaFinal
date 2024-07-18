@@ -17,11 +17,10 @@ app.engine("handlebars", exphbs.engine());
 app.set("view engine", "handlebars");
 app.set("views", "./src/views");
 
- 
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/", viewsRouter);
 
 app.listen(PUERTO, () => {
-    console.log(`Servidor escuchado en el puerto ${PUERTO}`);
+    console.log(`Servidor escuchando en el puerto ${PUERTO}`);
 });
