@@ -1,58 +1,115 @@
-const socket = io();
+// Asume que este código está en el archivo 'main.js'
 
-socket.on("products", (data) => {
-    renderProducts(data);
-})
+// Obtener el formulario y el botón
+const formAddProduct = document.getElementById('formAddProduct');
+const btnEnviar = document.getElementById('btnEnviar');
+const addToCartButtons = document.querySelectorAll('.btn-secon');
 
-const renderProducts = (data) => {
-    const containerProducts = document.getElementById("containerProducts");
-    containerProducts.innerHTML = "";
+// Agregar un event listener al botón "AGREGAR AL CARRITO"
+addToCartButtons.forEach(button => {
+  button.addEventListener('click', async (event) => {
+    event.preventDefault();
+    const productId = event.target.dataset.productId;
 
-    data.forEach(item => {
-        const card = document.createElement("div");
-        card.classList.add("product-card");
+    try {
+      // Enviar una solicitud al servidor para agregar el producto al carrito
+      const response = await fetch(`/api/carts/add/${productId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
 
-        card.innerHTML = `  
-            <h4 class="product-id">ID: ${item._id}</h4>
-            <h4 class="product-id">Código: ${item.code}</h4>
-            <h1 class="product-title">${item.title}</h1>
-            <h2 class="product-description">${item.description}</h2>
-            <h2 class="product-stock">Stock disponible: ${item.stock} | Categoría: ${item.category}</h2>
-            <p class="product-price">Precio: $${item.price}</p>
-            <button class="trash">ELIMINAR</button>
-        `;
-        containerProducts.appendChild(card);
-        card.querySelector("button").addEventListener("click", () => {
-            removeProduct(item._id);
-        });
-    });
-};
-
-const removeProduct = (id) => {
-    socket.emit("removeProduct", id);
-};
-
-document.getElementById("btnEnviar").addEventListener("click", () => {
-    addProduct();
-    cleanForm();
+      if (response.ok) {
+        // Mostrar un mensaje de éxito o actualizar la vista del carrito
+        alert('Producto agregado al carrito');
+      } else {
+        // Manejar errores
+        console.error('Error al agregar el producto al carrito');
+      }
+    } catch (error) {
+      console.error('Error al agregar el producto al carrito:', error);
+    }
+  });
 });
 
-const addProduct = () => {
-    const producto = {
-        title: document.getElementById("title").value,
-        description: document.getElementById("description").value,
-        price: document.getElementById("price").value,
-        img: document.getElementById("img").value,
-        code: document.getElementById("code").value,
-        stock: document.getElementById("stock").value,
-        category: document.getElementById("category").value,
-        status: document.getElementById("status").value === "true",
+// Agregar un event listener al botón "AGREGAR PRODUCTO"
+btnEnviar.addEventListener('click', async () => {
+  try {
+    // Obtener los valores de los campos del formulario
+    const title = document.getElementById('title').value;
+    const description = document.getElementById('description').value;
+    const price = document.getElementById('price').value;
+    const img = document.getElementById('img').value;
+    const code = document.getElementById('code').value;
+    const stock = document.getElementById('stock').value;
+    const category = document.getElementById('category').value;
+    const status = document.getElementById('status').value;
+
+    // Crear un objeto con los datos del producto
+    const newProduct = {
+      title,
+      description,
+      price: parseFloat(price),
+      thumbnail: img,
+      code,
+      stock: parseInt(stock),
+      category,
+      status: status === 'true'
     };
 
-    socket.emit("addProduct", producto);
-};
+    // Enviar la solicitud al servidor para crear el nuevo producto
+    const response = await fetch('/api/products', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newProduct)
+    });
 
-function cleanForm() {
-    const form = document.getElementById("formAddProduct");
-    form.reset();
+    if (response.ok) {
+      // Limpiar el formulario
+      formAddProduct.reset();
+      // Recargar la lista de productos
+      const productsResponse = await fetch('/api/products');
+      const products = await productsResponse.json();
+      renderProducts(products);
+    } else {
+      console.error('Error al crear el producto');
+    }
+  } catch (error) {
+    console.error('Error al crear el producto:', error);
+  }
+});
+
+// Función para renderizar la lista de productos
+function renderProducts(products) {
+  const containerProducts = document.getElementById('containerProducts');
+  containerProducts.innerHTML = '';
+
+  products.forEach(product => {
+    const productCard = document.createElement('div');
+    productCard.classList.add('col-md-4', 'mb-4');
+
+    productCard.innerHTML = `
+      <div class="card">
+        <img src="${product.thumbnail}" class="card-img-top" alt="${product.title}">
+        <div class="card-body">
+          <h5 class="card-title">${product.title}</h5>
+          <p class="card-text">${product.description}</p>
+          <p class="card-text">Precio: $${product.price}</p>
+          <a href="/products/${product._id}" class="btn btn-primary">Ver Detalle</a>
+          <button class="btn btn-secondary btn-secon" data-product-id="${product._id}">Agregar al carrito</button>
+        </div>
+      </div>
+    `;
+
+    containerProducts.appendChild(productCard);
+  });
 }
+
+// Cargar la lista de productos inicialmente
+fetch('/api/products')
+  .then(response => response.json())
+  .then(renderProducts)
+  .catch(error => console.error('Error al cargar los productos:', error));
