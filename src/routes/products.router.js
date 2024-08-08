@@ -1,117 +1,80 @@
-import express from "express";
-const router = express.Router();
-import ProductManager from "../dao/db/product-manager-db.js";
+import { Router } from "express";
+import ProductManager from "../dao/db/product-manager-db.js"; // Verifica que esta ruta sea correcta
+
+const productRouter = Router();
 const productManager = new ProductManager();
-//Modificacion 2 entrega: 
 
-router.get("/", async (req, res) => {
+productRouter.post("/", async (req, res) => {
     try {
-        const { limit = 10, page = 1, sort, query } = req.query;
-
-        const productos = await productManager.getProducts({
-            limit: parseInt(limit),
-            page: parseInt(page),
-            sort,
-            query,
-        });
-
-        res.json({
-            status: 'success',
-            payload: productos,
-            totalPages: productos.totalPages,
-            prevPage: productos.prevPage,
-            nextPage: productos.nextPage,
-            page: productos.page,
-            hasPrevPage: productos.hasPrevPage,
-            hasNextPage: productos.hasNextPage,
-            prevLink: productos.hasPrevPage ? `/api/products?limit=${limit}&page=${productos.prevPage}&sort=${sort}&query=${query}` : null,
-            nextLink: productos.hasNextPage ? `/api/products?limit=${limit}&page=${productos.nextPage}&sort=${sort}&query=${query}` : null,
-        });
-
+        const producto = await productManager.addProduct(req.body);
+        if (producto) {
+            res.status(201).json(producto);
+        } else {
+            res.status(400).json({ error: "Error al agregar producto" });
+        }
     } catch (error) {
-        console.error("Error al obtener productos", error);
-        res.status(500).json({
-            status: 'error',
-            error: "Error interno del servidor"
-        });
+        console.error("Error al agregar producto:", error);
+        res.status(500).json({ error: "Error al agregar producto" });
     }
 });
 
-//2) Traer solo un producto por id: 
+productRouter.get("/", async (req, res) => {
+    try {
+        const productos = await productManager.getProducts(req.query);
+        res.json(productos);
+    } catch (error) {
+        console.error("Error al obtener productos:", error);
+        res.status(500).json({ error: "Error al obtener productos" });
+    }
+});
 
-router.get("/:pid", async (req, res) => {
-    const id = req.params.pid;
+productRouter.get("/:id", async (req, res) => {
+    const { id } = req.params;
 
     try {
         const producto = await productManager.getProductById(id);
-        if (!producto) {
-            return res.json({
-                error: "Producto no encontrado"
-            });
+        if (producto) {
+            res.json(producto);
+        } else {
+            res.status(404).json({ error: "Producto no encontrado" });
         }
-
-        res.json(producto);
     } catch (error) {
-        console.error("Error al obtener producto", error);
-        res.status(500).json({
-            error: "Error interno del servidor"
-        });
+        console.error("Error al buscar producto por ID:", error);
+        res.status(500).json({ error: "Error al buscar producto por ID" });
     }
 });
 
-
-//3) Agregar nuevo producto: 
-
-router.post("/", async (req, res) => {
-    const nuevoProducto = req.body;
-
-    try {
-        await productManager.addProduct(nuevoProducto);
-        res.status(201).json({
-            message: "Producto agregado exitosamente"
-        });
-    } catch (error) {
-        console.error("Error al agregar producto", error);
-        res.status(500).json({
-            error: "Error interno del servidor"
-        });
-    }
-});
-
-//4) Actualizar por ID
-router.put("/:pid", async (req, res) => {
-    const id = req.params.pid;
+productRouter.put("/:id", async (req, res) => {
+    const { id } = req.params;
     const productoActualizado = req.body;
 
     try {
-        await productManager.updateProduct(id, productoActualizado);
-        res.json({
-            message: "Producto actualizado exitosamente"
-        });
+        const actualizado = await productManager.updateProduct(id, productoActualizado);
+        if (actualizado) {
+            res.json(actualizado);
+        } else {
+            res.status(404).json({ error: "Producto no encontrado" });
+        }
     } catch (error) {
-        console.error("Error al actualizar producto", error);
-        res.status(500).json({
-            error: "Error interno del servidor"
-        });
+        console.error("Error al actualizar producto:", error);
+        res.status(500).json({ error: "Error al actualizar producto" });
     }
 });
 
-//5) Eliminar producto: 
-
-router.delete("/:pid", async (req, res) => {
-    const id = req.params.pid;
+productRouter.delete("/:id", async (req, res) => {
+    const { id } = req.params;
 
     try {
-        await productManager.deleteProduct(id);
-        res.json({
-            message: "Producto eliminado exitosamente"
-        });
+        const eliminado = await productManager.deleteProduct(id);
+        if (eliminado) {
+            res.json({ message: "Producto eliminado correctamente!" });
+        } else {
+            res.status(404).json({ error: "Producto no encontrado" });
+        }
     } catch (error) {
-        console.error("Error al eliminar producto", error);
-        res.status(500).json({
-            error: "Error interno del servidor"
-        });
+        console.error("Error al eliminar producto:", error);
+        res.status(500).json({ error: "Error al eliminar producto" });
     }
 });
 
-export default router;
+export default productRouter;

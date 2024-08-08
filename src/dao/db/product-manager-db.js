@@ -4,17 +4,16 @@ class ProductManager {
 
     async addProduct({ title, description, price, img, code, stock, category, thumbnails }) {
         try {
-
             if (!title || !description || !price || !code || !stock || !category) {
                 console.log("Todos los campos son obligatorios");
-                return;
+                return null; // Cambiado a null para indicar error
             }
 
-            const existeProducto = await ProductModel.findOne({ code: code });
+            const existeProducto = await ProductModel.findOne({ code });
 
             if (existeProducto) {
                 console.log("El producto existe");
-                return;
+                return null; // Cambiado a null para indicar error
             }
 
             const newProduct = new ProductModel({
@@ -30,6 +29,7 @@ class ProductManager {
             });
 
             await newProduct.save();
+            return newProduct; // Devuelve el nuevo producto
 
         } catch (error) {
             console.log("Error al agregar producto", error);
@@ -93,14 +93,14 @@ class ProductManager {
             }
             return producto;
         } catch (error) {
-            console.log("Error al buscar el producto por id");
+            console.log("Error al buscar el producto por id", error);
+            throw error; // Añadido throw error para propagar el error
         }
     }
 
     async updateProduct(id, productoActualizado) {
         try {
-
-            const actualizado = await ProductModel.findByIdAndUpdate(id, productoActualizado);
+            const actualizado = await ProductModel.findByIdAndUpdate(id, productoActualizado, { new: true });
 
             if (!actualizado) {
                 console.log("No se encuentra el producto");
@@ -109,13 +109,12 @@ class ProductManager {
             return actualizado;
         } catch (error) {
             console.log("Error al actualizar el producto", error);
-
+            throw error; // Añadido throw error para propagar el error
         }
     }
 
     async deleteProduct(id) {
         try {
-
             const eliminado = await ProductModel.findByIdAndDelete(id);
 
             if (!eliminado) {
@@ -124,9 +123,10 @@ class ProductManager {
             }
 
             console.log("Producto eliminado correctamente!");
+            return eliminado; // Devuelve el producto eliminado
         } catch (error) {
             console.log("Error al eliminar el producto", error);
-            throw error;
+            throw error; // Añadido throw error para propagar el error
         }
     }
 }

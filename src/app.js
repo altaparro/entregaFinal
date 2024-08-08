@@ -7,7 +7,7 @@ import cartsRouter from "./routes/carts.router.js";
 import viewsRouter from "./routes/views.router.js";
 
 const app = express();
-const PUERTO = 8081;
+const PUERTO = 8080;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -22,5 +22,5 @@ app.use("/api/carts", cartsRouter);
 app.use("/", viewsRouter);
 
 app.listen(PUERTO, () => {
-  console.log(`Servidor escuchando en el puerto ${PUERTO}`);
+    console.log(`Servidor escuchando en el puerto ${PUERTO}`);
 });

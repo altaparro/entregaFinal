@@ -38,7 +38,7 @@ class CartManager {
 
     async agregarProductoAlCarrito(cartId, productId, quantity = 1) {
         try {
-            const carrito = await this.getCarritoById(cartId);
+            const carrito = await CartModel.findById(cartId);
             if (!carrito) throw new Error('Carrito no encontrado');
 
             const existeProducto = carrito.products.find(item => item.product.toString() === productId);
@@ -49,7 +49,7 @@ class CartManager {
                 carrito.products.push({ product: productId, quantity });
             }
 
-            await CartModel.updateOne({ _id: cartId }, { products: carrito.products });
+            await carrito.save(); // Cambiado a save() para asegurar la actualización
 
             return carrito;
         } catch (error) {
@@ -60,11 +60,11 @@ class CartManager {
 
     async vaciarCarrito(cartId) {
         try {
-            const carrito = await this.getCarritoById(cartId);
+            const carrito = await CartModel.findById(cartId);
             if (!carrito) throw new Error('Carrito no encontrado');
 
             carrito.products = [];
-            await CartModel.updateOne({ _id: cartId }, { products: [] });
+            await carrito.save(); // Cambiado a save() para asegurar la actualización
             return carrito;
         } catch (error) {
             console.error('Error al vaciar el carrito', error);
@@ -110,7 +110,7 @@ class CartManager {
 
             if (productIndex !== -1) {
                 carrito.products[productIndex].quantity = newQuantity;
-                await carrito.save();
+                await carrito.save(); // Cambiado a save() para asegurar la actualización
                 return carrito;
             } else {
                 throw new Error('Producto no encontrado');
