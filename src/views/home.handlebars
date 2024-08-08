@@ -1,0 +1,74 @@
+<body>
+    <main>
+        <section class="products">
+            Bienvenidos
+        </section>
+        <div class="button-container">
+            <br>
+            <a href="products" class="btn btn-primary">Productos</a><br>
+            <a href="realtimeproducts" class="btn btn-secondary">Administrar Productos</a><br>
+            <a href="/carts/66b4f67ce6da52ce0213b169" class="btn btn-tertiary">Carrito</a>
+        </div>
+        <br>
+
+    </main>
+</body>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color:   
+ #f0f0f0;
+}
+
+.hero {
+  text-align: center;
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.btn {
+  padding: 15px 30px;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.btn-primary {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.btn-secondary {
+  background-color: #2196F3;
+  color: white;
+}
+
+.btn-tertiary {
+  background-color: #FF9800;
+  color: white;
+}
+
+.btn:hover {
+  background-color: darken(background-color, 10%);
+}
+</style>
