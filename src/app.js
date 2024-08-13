@@ -30,3 +30,52 @@ const httpServer = app.listen(port, () => {
   displayRoutes(app);
   console.log(`Servidor escuchando en http://localhost:${port}`);
 });
+
+// Configuración de WebSocket con Socket.io
+import ProductManager from './dao/db/product-manager-db.js';
+const productManager = new ProductManager('./dao/fs/data/productos.json');
+import CartManager from './dao/db/cart-manager-db.js';
+const cartManager = new CartManager('./dao/fs/data/cart.json');
+const io = new Server(httpServer);
+
+io.on('connection', (socket) => {
+  console.log('Cliente conectado');
+
+  // Función para enviar la lista actualizada de productos a los clientes
+  const sendProducts = async () => {
+    try {
+      const productsData = await productManager.getProducts();
+      io.emit('products', productsData.docs);
+    } catch (error) {
+      console.error('Error al obtener productos:', error);
+    }
+  };
+
+  // Enviar la lista de productos al conectar un cliente
+  sendProducts();
+
+  // Manejar el evento para agregar un producto
+  socket.on('addProduct', async (producto) => {
+    try {
+      await productManager.addProduct(producto);
+      sendProducts();
+    } catch (error) {
+      console.error('Error al agregar producto:', error);
+    }
+  });
+
+  // Manejar el evento para eliminar un producto
+  socket.on('removeProduct', async (id) => {
+    try {
+      await productManager.deleteProduct(id);
+      sendProducts();
+    } catch (error) {
+      console.error('Error al eliminar producto:', error);
+    }
+  });
+
+  // Manejar la desconexión de un cliente
+  socket.on('disconnect', () => {
+    console.log('Cliente desconectado');
+  });
+});
