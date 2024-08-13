@@ -1,55 +1,43 @@
 import mongoose from "mongoose";
 
-const Schema = mongoose.Schema;
-
-const productSchema = new Schema({
+const productSchema = new mongoose.Schema({
     title: {
         type: String,
-        required: [true, 'El título es obligatorio'],
-        trim: true,
+        required: true
     },
     description: {
         type: String,
-        required: [true, 'La descripción es obligatoria'],
-        trim: true,
+        required: true
     },
     price: {
         type: Number,
-        required: [true, 'El precio es obligatorio'],
-        min: [0, 'El precio no puede ser negativo'],
+        required: true
     },
-    img: String,
+   img: {
+        type: String,
+    },
     code: {
         type: String,
-        required: [true, 'El código es obligatorio'],
-        unique: true,
-        trim: true,
+        required: true,
+        unique: true
     },
     stock: {
         type: Number,
-        required: [true, 'El stock es obligatorio'],
-        min: [0, 'El stock no puede ser negativo'],
+        required: true
     },
     category: {
         type: String,
-        required: [true, 'La categoría es obligatoria'],
-        trim: true,
+        required: true
     },
     status: {
         type: Boolean,
-        default: true,
+        required: true
     },
     thumbnails: {
         type: [String],
-        validate: [arrayLimit, 'Excede el número máximo de miniaturas permitidas (10)'],
-    },
-});
+    }
+})
 
-// Validación personalizada para limitar la cantidad de miniaturas
-function arrayLimit(val) {
-    return val.length <= 10;
-}
+const productModel = mongoose.model("products", productSchema)
 
-const ProductModel = mongoose.model("Product", productSchema);
-
-export default ProductModel;
+export default productModel;
