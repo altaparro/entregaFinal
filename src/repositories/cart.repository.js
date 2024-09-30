@@ -1,7 +1,7 @@
 import CartDao from "../dao/cart.dao.js";
 
 class CartRepository {
-    async createcart() {
+    async createCart() {
         return await CartDao.create();
     }
 

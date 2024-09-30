@@ -1,0 +1,139 @@
+<body class="bodyRegistrarse">
+    <header class="headerRegistrarse">
+        <a class="anclaLogo" href="/">
+            <span>INICIO</span>
+        </a>
+    </header>
+    <main class="seccionRegistrarse">
+        <form action="/api/sessions/register" method="POST">
+            <h2 class="tituloRegistrarse">Registro</h2>
+            <div>
+                <input type="text" placeholder="Nombre" id="nombre" name="first_name" required>
+            </div>
+            <div>
+                <input type="text" placeholder="Apellido" id="apellido" name="last_name" required>
+            </div>
+            <div>
+                <input type="email" placeholder="E-mail" id="email" name="email" required>
+            </div>
+            <div>
+                <input type="password" placeholder="Contraseña" id="password" name="password" required>
+            </div>
+            <div>
+                <input type="number" placeholder="Edad" id="age" name="age" required>
+            </div>
+            <div>
+                <input class="boton" type="submit" value="Registrarse">
+            </div>
+        </form>
+    </main>
+</body>
+
+<style>
+    * {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .bodyRegistrarse {
+        height: 100vh;
+        background: linear-gradient(135deg, #24242473, #24242473), url(../../images/pages/frontPage.png);
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .headerRegistrarse {
+        color: #ffffff;
+        background: rgba(35, 36, 36, 0.8);
+        padding: 15px 0;
+        backdrop-filter: blur(5px);
+    }
+
+    .anclaLogo {
+        text-decoration: none;
+        color: #ffffff;
+        font-weight: 700;
+        margin-left: 30px;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+    }
+
+    .anclaLogo:hover {
+        color: rgba(193, 255, 114, 0.87);
+        border-bottom: 2px solid rgba(12, 192, 223, 0.87);
+    }
+
+    .seccionRegistrarse {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    form {
+        background-color: rgba(36, 36, 36, 0.8);
+        width: 100%;
+        max-width: 400px;
+        border-radius: 15px;
+        padding: 40px;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        backdrop-filter: blur(4px);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .tituloRegistrarse {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: #ffffff;
+        text-align: center;
+    }
+
+    input {
+        width: 100%;
+        height: 50px;
+        padding: 0 20px;
+        font-size: 1rem;
+        border-radius: 25px;
+        border: none;
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #ffffff;
+        transition: all 0.3s ease;
+    }
+
+    input::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    input:focus {
+        outline: none;
+        background-color: rgba(255, 255, 255, 0.2);
+        box-shadow: 0 0 0 2px rgba(12, 192, 223, 0.5);
+    }
+
+    .boton {
+        background-color: rgba(12, 192, 223, 0.87);
+        color: #ffffff;
+        padding: 15px;
+        border-radius: 25px;
+        font-size: 1.2rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+    }
+
+    .boton:hover {
+        background-color: rgba(12, 192, 223, 1);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+</style>
