@@ -8,7 +8,7 @@ class UserService {
         if (userExists) throw new Error("El e-mail ingresado ya está en uso."); 
 
         const newCart = await CartRepository.createCart(); 
-
+        console.log("ESTO TIENE USERDATA: ", userData);
         userData.cart = newCart._id;
         userData.password = createHash(userData.password); 
         return await UserRepository.createUser(userData); 

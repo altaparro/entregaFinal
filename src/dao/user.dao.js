@@ -10,7 +10,7 @@ class UserDao {
     }
 
     async save(userData) {
-        const newUser = new UserModel(userData); // Cambié el nombre de la variable para mayor claridad
+        const newUser = new UserModel(userData); 
         return await newUser.save(); 
     }
 }

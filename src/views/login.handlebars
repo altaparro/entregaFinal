@@ -1,0 +1,173 @@
+<body class="bodyLogin">
+    <header class="headerLogin">
+        <a class="anclaLogo" href="/">
+            <span>INICIO</span>
+        </a>
+    </header>
+
+    <main class="seccionLogin">
+        <form id="loginForm" action="/api/sessions/login" method="post" onsubmit="return validateForm()">
+            <h2 class="tituloLogin">Iniciar Sesión</h2>
+            <div class="inputContainer">
+                <input type="email" placeholder="Email" id="email" name="email" required>
+            </div>
+            <div class="inputContainer">
+                <input type="password" placeholder="Contraseña" id="password" name="password" required>
+            </div>
+            <div class="buttonContainer">
+                <button class="boton" type="submit">Iniciar Sesión</button>
+            </div>
+          
+            <div class="help">
+                <p>¿Aún no estás registrado?</p>
+                <a class="helpLink" href="/api/sessions/register">Registrarse</a>
+            </div>
+        </form>
+    </main>
+</body>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css');
+
+    * {
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .bodyLogin {
+        height: 100vh;
+        background: linear-gradient(135deg, #24242473, #24242473), url(../../images/pages/frontPage.png);
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .headerLogin {
+        color: #ffffff;
+        background: rgba(35, 36, 36, 0.8);
+        padding: 15px 0;
+        backdrop-filter: blur(5px);
+    }
+
+    .anclaLogo {
+        text-decoration: none;
+        color: #ffffff;
+        font-weight: 600;
+        margin-left: 30px;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+    }
+
+    .anclaLogo:hover {
+        color: rgba(193, 255, 114, 0.87);
+        border-bottom: 2px solid rgba(12, 192, 223, 0.87);
+    }
+
+    .seccionLogin {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    form {
+        background-color: rgba(36, 36, 36, 0.9);
+        width: 100%;
+        max-width: 400px;
+        border-radius: 15px;
+        padding: 40px;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        backdrop-filter: blur(4px);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .tituloLogin {
+        font-size: 2.3rem;
+        font-weight: 600;
+        margin-bottom: 30px;
+        color: #ffffff;
+        text-align: center;
+    }
+
+    .inputContainer {
+        margin-bottom: 20px;
+    }
+
+    input {
+        width: 100%;
+        height: 50px;
+        padding: 0 20px;
+        font-size: 0.9rem;
+        border-radius: 25px;
+        border: 2px solid rgba(12, 192, 223, 0.5);
+        background-color: rgba(51, 51, 51, 0.8);
+        color: #ffffff;
+        transition: all 0.3s ease;
+    }
+
+    input:focus {
+        outline: none;
+        border-color: rgba(12, 192, 223, 1);
+        box-shadow: 0 0 0 2px rgba(12, 192, 223, 0.3);
+    }
+
+    .buttonContainer {
+        margin-bottom: 20px;
+    }
+
+    .boton {
+        width: 100%;
+        background-color: rgba(12, 192, 223, 0.87);
+        color: #ffffff;
+        padding: 12px;
+        border-radius: 25px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .boton:hover {
+        background-color: rgba(12, 192, 223, 1);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .help {
+        text-align: center;
+        font-size: 0.85rem;
+        color: #ffffff;
+        margin-top: 20px;
+    }
+
+    .helpLink {
+        color: rgba(12, 192, 223, 0.87);
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .helpLink:hover {
+        color: rgba(193, 255, 114, 0.87);
+    }
+
+    @media (max-width: 600px) {
+        form {
+            padding: 30px;
+        }
+
+        .tituloLogin {
+            font-size: 1.8rem;
+        }
+
+        input, .boton {
+            font-size: 0.9rem;
+        }
+    }
+</style>
